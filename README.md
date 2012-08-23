@@ -23,7 +23,8 @@ Generating the SSO token from SSO key and given uservoice subdomain can be done 
       $sso_token = UserVoice::generate_sso_token('uservoice-subdomain', '982c88f2df72572859e8e23423eg87ed', array(
         :display_name => "John Doe",
         :email => 'john.doe@example.com'
-      ));
+      ), 5*60); # the token will be valid for 5 minutes (5*60 seconds) by default
+
       echo 'https://uservoice-subdomain.uservoice.com/?sso='.$sso_token."\n";
 
     ?>
