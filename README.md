@@ -8,6 +8,7 @@ Examples
 ========
 
 Prerequisites:
+* The mcrypt module needs to be installed
 * Suppose your UserVoice site is at http://uservoice-subdomain.uservoice.com/ and **USERVOICE\_SUBDOMAIN** = uservoice-subdomain
 * **SSO\_KEY** = 982c88f2df72572859e8e23423eg87ed (Admin Console -> Settings -> General -> User Authentication)
 
