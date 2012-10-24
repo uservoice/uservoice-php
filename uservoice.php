@@ -34,5 +34,4 @@ function generate_sso_token($subdomain_key, $sso_key, $user_hash, $valid_for = 3
     return urlencode($encryptedData);
 }
 
-
 ?>

@@ -1,51 +1,136 @@
 <?php
 namespace UserVoice;
 
-require_once('uservoice/exceptions.php');
+require_once('uservoice/collection.php');
+
+class APIError extends \Exception { }
+class ApplicationError extends APIError { }
+class NotFound extends APIError { }
+class Unauthorized extends APIError { }
 
 class Client
 {
-    var $subdomain;
-    var $api_key;
-    var $api_secret;
-    var $token;
-    var $secret;
+    public $token;
+    public $secret;
 
-    function __construct($subdomain, $api_key, $api_secret) {
+    private $subdomain;
+    private $api_key;
+    private $api_secret;
+    private $opts;
+
+    function __construct($subdomain, $api_key, $api_secret, $opts=array()) {
         $this->subdomain = $subdomain;
-        $this->api_url = "https://$subdomain.uservoice.com";
+        if (!isset($opts['uservoice_domain'])) {
+            $opts['uservoice_domain'] = 'uservoice.com';
+        }
+        if (!isset($opts['protocol'])) {
+            $opts['protocol'] = 'https';
+        }
+        if (!isset($opts['oauth_token'])) {
+            $opts['oauth_token'] = '';
+        }
+        if (!isset($opts['oauth_token_secret'])) {
+            $opts['oauth_token_secret'] = '';
+        }
+        $this->opts = $opts;
+        $this->api_url = "${opts['protocol']}://$subdomain.${opts['uservoice_domain']}";
         $this->api_key = $api_key;
         $this->api_secret = $api_secret;
-        $this->token = "";
-        $this->secret = "";
+        $this->token = $opts['oauth_token'];
+        $this->secret = $opts['oauth_token_secret'];
         $this->access_token = new \OAuth($api_key, $api_secret); 
         $this->access_token->setToken($this->token, $this->secret);
         $this->default_headers = array('Content-Type' => 'application/json', 'Accept' => 'application/json');
     }
 
-    function request($method, $path, $params='') {
+    function request($method, $path, $params=null) {
         try {
             $method = strtoupper($method);
             $url = $this->api_url . $path;
-            print("Making request to $url\n");
-            $result = $this->access_token->fetch($url, array(), $method, $this->default_headers);
-            var_dump($result);
-            return $result['body'];
+            // print("Making request to $url\n");
+            $body = '';
+            if ($params) {
+                $body = json_encode($params);
+            }
+            $result = $this->access_token->fetch($url, $body, $method, $this->default_headers);
+            $json = $this->access_token->getLastResponse();
+            // print("$json\n");
+            $attrs = json_decode($json, true);
+            return $attrs;
         } catch(\OAuthException $oauthException) {
             $json_error = json_decode($oauthException->lastResponse, true);
             if (isset($json_error['errors']) && isset($json_error['errors']['type'])) {
+                $msg = $json_error['errors']['message'];
+
                 switch ($json_error['errors']['type']) {
-                    case 'application_error': throw new ApplicationError($json_error);
-                    case 'record_not_found': throw new NotFound($json_error);
-                    case 'unauthorized': throw new Unauthorized($json_error);
+                    case 'application_error': throw new ApplicationError($msg);
+                    case 'record_not_found': throw new NotFound($msg);
+                    case 'unauthorized': throw new Unauthorized($msg);
                     default: break;
                 }
             }
-            throw new APIError($json_error);
+            throw new APIError($oauthException->lastResponse);
         }
     }
-    function get($path) {
-        return $this->request('get', $path);
+    function get($path) { return $this->request('get', $path); }
+    function delete($path) { return $this->request('delete', $path); }
+    function post($path, $params) { return $this->request('post', $path, $params); }
+    function put($path, $params) { return $this->request('put', $path, $params); }
+
+    function get_collection($path, $opts=array()) {
+        return new Collection($this, $path, $opts);
+    }
+    public function get_request_token() {
+        try {
+            $url = $this->api_url . '/oauth/request_token';
+            $result = FALSE;
+            if (isset($this->callback)) {
+                $result = $this->access_token->getRequestToken($url, $this->callback);
+            } else {
+                $result = $this->access_token->getRequestToken($url);
+            }
+            if (is_array($result)) {
+                return $this->login_with_access_token(
+                    $result['oauth_token'],
+                    $result['oauth_token_secret']);
+            } else {
+                throw new Unauthorized($this->access_token->getLastResponse());
+            }
+        } catch(\OAuthException $oauthException) {
+            throw new Unauthorized($oauthException->lastResponse);
+        }
+    }
+    public function login_as_owner() {
+        $result = $this->post('/api/v1/users/login_as_owner', array(
+            'request_token' => $this->get_request_token()->token
+        ));
+        if (is_array($result) && isset($result['token'])) {
+            var_dump('login_as_owner');
+            return $this->login_with_access_token(
+                $result['token']['oauth_token'],
+                $result['token']['oauth_token_secret']);
+        } else {
+            throw new Unauthorized($this->access_token->getLastResponse());
+        }
+    }
+    public function login_as($email) {
+        $result = $this->post('/api/v1/users/login_as', array(
+            'request_token' => $this->get_request_token()->token,
+            'user' => array('email' => $email)
+        ));
+        if (is_array($result) && isset($result['token'])) {
+            return $this->login_with_access_token(
+                $result['token']['oauth_token'],
+                $result['token']['oauth_token_secret']);
+        } else {
+            throw new Unauthorized($this->access_token->getLastResponse());
+        }
+    }
+    public function login_with_access_token($token, $secret) {
+        $opts = $this->opts;
+        $opts['oauth_token'] = $token;
+        $opts['oauth_token_secret'] = $secret;
+        return new Client($this->subdomain, $this->api_key, $this->api_secret, $opts);
     }
 }
 ?>
