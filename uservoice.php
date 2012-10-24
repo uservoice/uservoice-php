@@ -1,7 +1,9 @@
 <?php
-class UserVoice {
+namespace UserVoice;
 
-  public static function generate_sso_token($subdomain_key, $sso_key, $user_hash, $valid_for = 300) {
+require_once('uservoice/client.php');
+
+function generate_sso_token($subdomain_key, $sso_key, $user_hash, $valid_for = 300) {
 
     $salted = $sso_key . $subdomain_key;
     $hash = hash('sha1',$salted,true);
@@ -9,14 +11,14 @@ class UserVoice {
     $iv = "OpenSSL for Ruby";
 
     if (!array_key_exists('expires', $user_hash)) {
-      $user_hash['expires'] = gmdate('Y-m-d H:i:s', time()+$valid_for);
+        $user_hash['expires'] = gmdate('Y-m-d H:i:s', time()+$valid_for);
     }
 
     $data = json_encode($user_hash);
 
 
     for ($i = 0; $i < 16; $i++) {
-      $data[$i] = $data[$i] ^ $iv[$i];
+        $data[$i] = $data[$i] ^ $iv[$i];
     }
 
     $pad = 16 - (strlen($data) % 16);
@@ -30,7 +32,6 @@ class UserVoice {
     $encryptedData = base64_encode($encryptedData);
 
     return urlencode($encryptedData);
-  }
 }
 
 

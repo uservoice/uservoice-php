@@ -4,6 +4,26 @@ UserVoice PHP library for API connections
 This library allows you to easily:
 * Generate SSO token for creating SSO users / logging them into UserVoice (http://uservoice.com).
 
+Installation
+============
+
+Install PECL/OAuth for PHP5 by following the instructions here: http://www.php.net/manual/en/oauth.setup.php
+For installing, you need PEAR: http://pear.php.net/manual/en/installation.getting.php
+
+And add location of PEAR into your php.ini. Find the lines which begin with 'include_path = ' and add the following line:
+```php
+include_path = ".:/usr/lib/php/pear"
+```
+Now you should have the command 'pecl' available, so run:
+```sh
+sudo pecl install oauth
+```
+The installation script will finally suggest you to add the following line to php.ini:
+```php
+extension=oauth.so
+```
+Now you should be good to go!
+
 Examples
 ========
 

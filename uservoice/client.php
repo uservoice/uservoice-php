@@ -1,99 +1,51 @@
 <?php
-class UserVoiceHelper
+namespace UserVoice;
+
+require_once('uservoice/exceptions.php');
+
+class Client
 {
-	const OAUTH_CONSUMER_KEY = "<Consumer Key>";
-	const OAUTH_CONSUMER_SECRET = "<Consumer Secret>";
+    var $subdomain;
+    var $api_key;
+    var $api_secret;
+    var $token;
+    var $secret;
 
-	const ADMIN_OAUTH_TOKEN = "<Get from Authorize API>";
-	const ADMIN_OAUTH_SECRET = "<Get from Authorize API>";
+    function __construct($subdomain, $api_key, $api_secret) {
+        $this->subdomain = $subdomain;
+        $this->api_url = "https://$subdomain.uservoice.com";
+        $this->api_key = $api_key;
+        $this->api_secret = $api_secret;
+        $this->token = "";
+        $this->secret = "";
+        $this->access_token = new \OAuth($api_key, $api_secret); 
+        $this->access_token->setToken($this->token, $this->secret);
+        $this->default_headers = array('Content-Type' => 'application/json', 'Accept' => 'application/json');
+    }
 
-	const SUBDOMAIN = "acme";
-
-
-	public static function CreateTicketNote($ticket_id,$msg)
-	{
-		$oauthObject=self::GetOauth(true);
-
-		$res = self::MakeRequest($oauthObject,'https://'.self::SUBDOMAIN.'.uservoice.com/api/v1/tickets/'.$ticket_id.'/notes.json',array("note[text]" => $msg),"POST");
-
-		return $res;
-	}
-
-	public static function GetTicketsBySearch($query)
-	{
-		$oauthObject=self::GetOauth();
-
-		$res = self::MakeRequest($oauthObject, 'http://'.self::SUBDOMAIN.'.uservoice.com/api/v1/tickets/search.json', array('query' => $query));
-
-		return $res->tickets;
-	}
-
-	public static function AuthorizeBySSO($user_data)
-	{
-		$oauthObject=self::GetOauth();
-
-		$token = self::MakeRequest($oauthObject, 'http://'.self::SUBDOMAIN.'.uservoice.com/api/v1/oauth/request_token.json', array());
-
-		$sso=self::GetSSOToken($user_data);
-
-		$oauthObject=self::GetOauth();
-		$res = self::MakeRequest($oauthObject, 'http://'.self::SUBDOMAIN.'.uservoice.com/api/v1/oauth/authorize.json', array(
-			'sso' => urlencode($sso),
-			'guid'=> $user_data['guid'],
-			'scheme'=> 'aes_cbc_128',
-			'request_token' => $token->token->oauth_token
-		));
-
-		return $res;
-	}
-
-	public static function GetOauth($use_admin=false)
-	{
-		$oauthObject = new OAuthSimple(self::OAUTH_CONSUMER_KEY,self::OAUTH_CONSUMER_SECRET);
-		/*$oauthObject->sig = array(
-			'consumer_key'     => self::OAUTH_CONSUMER_KEY,
-			'shared_secret'    => self::OAUTH_CONSUMER_SECRET);
-		*/
-
-		if($use_admin)
-		{
-			$oauthObject->setTokensAndSecrets(array(
-				"access_token"=>self::ADMIN_OAUTH_TOKEN,
-				"access_secret"=> self::ADMIN_OAUTH_SECRET
-			));
-		}
-
-		return $oauthObject;
-	}
-
-	public static function MakeRequest($oauthObject, $apiUrl, $params, $action="GET")
-	{
-		$oauthObject->setAction($action);
-
-		$result = $oauthObject->sign(array(
-			'path'      => $apiUrl,
-			'parameters'=> $params,
-			'signatures'=> $oauthObject->sig,
-			'action'=>$action
-		));
-
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($ch, CURLOPT_URL, $result['signed_url']);
-
-		if($action=="POST")
-		{
-			curl_setopt($ch,CURLOPT_POST,true);
-			curl_setopt($ch,CURLOPT_POSTFIELDS,$params);
-		}
-
-		$r = curl_exec($ch);
-		curl_close($ch);
-
-		$res=json_decode($r);
-
-		return $res;
-	}
-
+    function request($method, $path, $params='') {
+        try {
+            $method = strtoupper($method);
+            $url = $this->api_url . $path;
+            print("Making request to $url\n");
+            $result = $this->access_token->fetch($url, array(), $method, $this->default_headers);
+            var_dump($result);
+            return $result['body'];
+        } catch(\OAuthException $oauthException) {
+            $json_error = json_decode($oauthException->lastResponse, true);
+            if (isset($json_error['errors']) && isset($json_error['errors']['type'])) {
+                switch ($json_error['errors']['type']) {
+                    case 'application_error': throw new ApplicationError($json_error);
+                    case 'record_not_found': throw new NotFound($json_error);
+                    case 'unauthorized': throw new Unauthorized($json_error);
+                    default: break;
+                }
+            }
+            throw new APIError($json_error);
+        }
+    }
+    function get($path) {
+        return $this->request('get', $path);
+    }
 }
 ?>
