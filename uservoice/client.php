@@ -105,7 +105,6 @@ class Client
             'request_token' => $this->get_request_token()->token
         ));
         if (is_array($result) && isset($result['token'])) {
-            var_dump('login_as_owner');
             return $this->login_with_access_token(
                 $result['token']['oauth_token'],
                 $result['token']['oauth_token_secret']);
