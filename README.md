@@ -9,14 +9,14 @@ This library allows you to easily:
 Installation
 ============
 
-Install PECL/OAuth for PHP5 by following the instructions here: http://www.php.net/manual/en/oauth.setup.php
-For installing, you need PEAR: http://pear.php.net/manual/en/installation.getting.php
+For installing, you need PECL/PEAR: http://pear.php.net/manual/en/installation.getting.php
 
 And add location of PEAR into your php.ini. Find the lines which begin with 'include\_path = ' and add the following line:
 ```php
 include_path = ".:/usr/lib/php/pear"
 ```
-Now you should have the command 'pecl' available, so run:
+
+When you have the command 'pecl' available, install OAuth ([detailed instructions](http://www.php.net/manual/en/oauth.setup.php)):
 ```sh
 sudo pecl install oauth
 ```
