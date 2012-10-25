@@ -1,7 +1,7 @@
 <?php
 
-require_once('uservoice/client.php');
-require_once('uservoice/sso.php');
+require_once(dirname(__FILE__) . '/uservoice/client.php');
+require_once(dirname(__FILE__) . '/uservoice/sso.php');
 
 class UserVoice {
 }

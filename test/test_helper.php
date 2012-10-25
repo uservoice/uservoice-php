@@ -1,7 +1,7 @@
 <?php
-require_once('simpletest/autorun.php');
-require_once('lib/spyc.php');
-require_once('uservoice.php');
+require_once(dirname(__FILE__) . '/lib/simpletest/autorun.php');
+require_once(dirname(__FILE__) . '/lib/spyc.php');
+require_once(dirname(__FILE__) . '/../uservoice.php');
 
 function readConfiguration($file) {
     $config = Spyc::YAMLLoad('test/config.yml');

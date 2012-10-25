@@ -1,5 +1,5 @@
 <?php
-require_once('test/test_helper.php');
+require_once(dirname(__FILE__) . '/test_helper.php');
 
 class SsoTest extends UnitTestCase {
 
