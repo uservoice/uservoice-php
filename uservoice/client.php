@@ -38,23 +38,28 @@ class Client
         $this->api_secret = $api_secret;
         $this->token = $opts['oauth_token'];
         $this->secret = $opts['oauth_token_secret'];
-        $this->access_token = new \OAuth($api_key, $api_secret); 
+        $this->access_token = new \OAuth($api_key, $api_secret, OAUTH_SIG_METHOD_HMACSHA1, OAUTH_AUTH_TYPE_AUTHORIZATION); 
         $this->access_token->setToken($this->token, $this->secret);
         $this->default_headers = array('Content-Type' => 'application/json', 'Accept' => 'application/json');
+    }
+
+    function authorize_url() {
+        $this->request_token = $this->get_request_token();
+        return $this->api_url . '/oauth/authorize?oauth_token=' . $this->request_token->token;
     }
 
     function request($method, $path, $params=null) {
         try {
             $method = strtoupper($method);
             $url = $this->api_url . $path;
-            // print("Making request to $url\n");
-            $body = '';
+            //print("Making request to $url\n");
+            $body = null;
             if ($params) {
                 $body = json_encode($params);
             }
             $result = $this->access_token->fetch($url, $body, $method, $this->default_headers);
             $json = $this->access_token->getLastResponse();
-            // print("$json\n");
+            //print("$json\n");
             $attrs = json_decode($json, true);
             return $attrs;
         } catch(\OAuthException $oauthException) {
@@ -91,8 +96,8 @@ class Client
             }
             if (is_array($result)) {
                 return $this->login_with_access_token(
-                    $result['oauth_token'],
-                    $result['oauth_token_secret']);
+                           $result['oauth_token'],
+                           $result['oauth_token_secret']);
             } else {
                 throw new Unauthorized($this->access_token->getLastResponse());
             }
@@ -100,6 +105,27 @@ class Client
             throw new Unauthorized($oauthException->lastResponse);
         }
     }
+
+    public function login_with_verifier($verifier) {
+        try {
+            $token = null;
+            $request_token_client = $this->request_token->access_token;
+            if ($request_token_client->fetch($this->api_url . '/oauth/access_token', array('oauth_verifier' => $verifier), 'POST')) {
+                $result = $request_token_client->getLastResponse(); 
+                parse_str($result, $token);
+            }
+            if (is_array($token)) {
+                return $this->login_with_access_token(
+                           $token['oauth_token'],
+                           $token['oauth_token_secret']);
+            } else {
+                throw new Unauthorized('Could not get Access Token');
+            }
+        } catch(\OAuthException $oauthException) {
+            throw new Unauthorized($oauthException->lastResponse);
+        }
+    }
+
     public function login_as_owner() {
         $result = $this->post('/api/v1/users/login_as_owner', array(
             'request_token' => $this->get_request_token()->token

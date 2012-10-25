@@ -133,34 +133,28 @@ actually owns certain email address in UserVoice, you need to use 3-Legged API
 calls. Just pass your user an authorize link to click, so that user may grant
 your site permission to access his or her data in UserVoice.
 
-```python
-import uservoice
-CALLBACK_URL = 'http://localhost:3000/' # your site
+```php
+<?php
 
-client = uservoice.Client($USERVOICE_SUBDOMAIN, $API_KEY, $API_SECRET, callback=CALLBACK_URL)
+require_once('uservoice.php');
+$callback_url = 'http://localhost:3000/'; # your site
+
+$client = new UserVoice\Client($USERVOICE_SUBDOMAIN, $API_KEY, $API_SECRET, array('callback' => $callback_url));
 
 # At this point you want to print/redirect to client.authorize_url in your application.
 # Here we just output them as this is a command-line example.
-print "1. Go to {url} and click \"Allow access\".".format(url=client.authorize_url())
-print "2. Then type the oauth_verifier which is passed as a GET parameter to the callback URL:"
+print("1. Go to " . $client->authorize_url() . " and click \"Allow access\".\n");
+print("2. Then type the oauth_verifier which is passed as a GET parameter to the callback URL:\n");
 
 # In a web app we would get the oauth_verifier via a redirection to CALLBACK_URL.
 # In this command-line example we just read it from stdin:
-access_token = client.login_with_verifier(raw_input())
+$access_token = $client->login_with_verifier(readline());
 
 # All done. Now we can read the current user's email address:
-user = access_token.get("/api/v1/users/current")['user']
-print "User logged in, Name: {name}, email: {email}".format(**user)
+$r = $access_token->get("/api/v1/users/current");
+$user = $r['user'];
 
-# To reuse the access token at a later point, store the token and secret. For example:
-# 1. Find user (in Django)
-u = User.objects.get(email=user['email'])
-# 2. Associate token and secret with the user
-u.access_tokens.create(system='uservoice', token=access_token.token, secret=access_token.secret)
+print("User logged in, Name: ${user['name']}, email: ${user['email']}\n");
 
-# When you need the token again:
-# 1. Find token of the current user
-token = u.access_tokens.get(system='uservoice')
-# 2. Use the token and secret to log in
-access_token = client.login_with_access_token(token.token, token.secret)
+?>
 ```
