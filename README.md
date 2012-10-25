@@ -9,29 +9,26 @@ This library allows you to easily:
 Installation
 ============
 
-For installing, you need PECL/PEAR: http://pear.php.net/manual/en/installation.getting.php
+For installing OAuth, you need [PECL/PEAR](http://pear.php.net/manual/en/installation.getting.php). After downloading 
+PEAR you need to specify its location in your php.ini.
 
-And add location of PEAR into your php.ini. Find the lines which begin with 'include\_path = ' and add the following line:
 ```php
 include_path = ".:/usr/lib/php/pear"
 ```
 
-When you have the command 'pecl' available, install OAuth ([detailed instructions](http://www.php.net/manual/en/oauth.setup.php)):
-```sh
-sudo pecl install oauth
-```
-The installation script will finally suggest you to add the following line to php.ini:
-```php
-extension=oauth.so
-```
-Now you should be good to go!
+When you have the command 'pecl' available, install OAuth and mcrypt:
+
+* [Installing OAuth](http://www.php.net/manual/en/oauth.setup.php)
+* [Installing mcrypt](http://www.php.net/manual/en/mcrypt.setup.php)
+
+Then unpack this directory where you please and call require_once on **uservoice.php**. Then you should be good to go!
 
 Examples
 ========
 
 Prerequisites:
 
-* The mcrypt and oauth need to be installed. Check installation instructions for oauth above.
+* The mcrypt and oauth need to be installed. Check installation instructions above.
 * Place the following configuration parameters somewhere in your application:
 
 ```php
