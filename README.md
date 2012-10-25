@@ -36,12 +36,12 @@ Prerequisites:
 
 ```php
 # Suppose your UserVoice site is at http://uservoice-subdomain.uservoice.com/
-const USERVOICE_SUBDOMAIN = 'uservoice-subdomain';
-const SSO_KEY = '982c88f2df72572859e8e23423eg87ed'; # Admin Console -> Settings -> General -> User Authentication
+$USERVOICE_SUBDOMAIN = 'uservoice-subdomain';
+$SSO_KEY = '982c88f2df72572859e8e23423eg87ed'; # Admin Console -> Settings -> General -> User Authentication
 
 # Define an API client at: Admin Console -> Settings -> Channels -> API
-const API_KEY = 'oQt2BaunWNuainc8BvZpAm';
-const API_SECRET = '3yQMSoXBpAwuK3nYHR0wpY6opE341inL9a2HynGF2';
+$API_KEY = 'oQt2BaunWNuainc8BvZpAm';
+$API_SECRET = '3yQMSoXBpAwuK3nYHR0wpY6opE341inL9a2HynGF2';
 ```
 
 SSO-token generation using uservoice library
@@ -54,19 +54,19 @@ Generating the SSO token from SSO key and given uservoice subdomain can be done 
 <?php
     require_once('uservoice.php');
 
-    $sso_token = UserVoice\generate_sso_token(USERVOICE_SUBDOMAIN, SSO_KEY, array(
+    $sso_token = UserVoice\generate_sso_token($USERVOICE_SUBDOMAIN, $SSO_KEY, array(
         'display_name' => "John Doe",
         'email' => 'john.doe@example.com'
     ), 5*60); # the token will be valid for 5 minutes (5*60 seconds) by default
 
-    echo 'https://' . USERVOICE_SUBDOMAIN . '.uservoice.com/?sso='.$sso_token."\n";
+    echo 'https://' . $USERVOICE_SUBDOMAIN . '.uservoice.com/?sso='.$sso_token."\n";
 ?>
 ```
 
 Making API calls
 ----------------
 
-You need to create an instance of UserVoice\\Client. Get API_KEY and API_SECRET for an API client which you can create 
+You need to create an instance of UserVoice\\Client. Get $API_KEY and $API_SECRET for an API client which you can create 
 from Admin Console. Go to Settings -> Channels -> API.
 
 ```php
@@ -75,12 +75,12 @@ from Admin Console. Go to Settings -> Channels -> API.
 try {
     require_once('uservoice.php');
 
-    $client = new \UserVoice\Client(USERVOICE_SUBDOMAIN, API_KEY, API_SECRET);
+    $client = new \UserVoice\Client($USERVOICE_SUBDOMAIN, $API_KEY, $API_SECRET);
 
     # Get users of a subdomain (requires trusted client, but no user)
     $users = $client->get_collection("/api/v1/users");
 
-    print "Subdomain \"" . USERVOICE_SUBDOMAIN . "\" has " . count($users) . " users.\n";
+    print "Subdomain \"" . $USERVOICE_SUBDOMAIN . "\" has " . count($users) . " users.\n";
 
     foreach($users as $user) {
         print("User: \"${user['name']}\", Profile URL: ${user['url']}\n");
@@ -137,7 +137,7 @@ your site permission to access his or her data in UserVoice.
 import uservoice
 CALLBACK_URL = 'http://localhost:3000/' # your site
 
-client = uservoice.Client(USERVOICE_SUBDOMAIN, API_KEY, API_SECRET, callback=CALLBACK_URL)
+client = uservoice.Client($USERVOICE_SUBDOMAIN, $API_KEY, $API_SECRET, callback=CALLBACK_URL)
 
 # At this point you want to print/redirect to client.authorize_url in your application.
 # Here we just output them as this is a command-line example.
