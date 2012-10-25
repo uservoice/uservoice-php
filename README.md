@@ -72,46 +72,47 @@ from Admin Console. Go to Settings -> Channels -> API.
 ```php
 <?
 
+try {
     require_once('uservoice.php');
 
-    $client = \UserVoice\Client(USERVOICE_SUBDOMAIN, API_KEY, API_SECRET);
+    $client = new \UserVoice\Client(USERVOICE_SUBDOMAIN, API_KEY, API_SECRET);
 
     # Get users of a subdomain (requires trusted client, but no user)
-    $users = $client.get_collection("/api/v1/users");
+    $users = $client->get_collection("/api/v1/users");
 
     print "Subdomain \"" . USERVOICE_SUBDOMAIN . "\" has " . count($users) . " users.\n";
 
     foreach($users as $user) {
-        print("User: "${user['name']}", Profile URL: ${user['url']}\n");
+        print("User: \"${user['name']}\", Profile URL: ${user['url']}\n");
     }
 
 
     # Now, let's login as mailaddress@example.com, a regular user
-    $regular_access_token = $client.login_as('mailaddress@example.com');
+    $regular_access_token = $client->login_as('mailaddress@example.com');
 
     # Example request #1: Get current user.
-    $r = regular_access_token.get("/api/v1/users/current");
+    $r = $regular_access_token->get("/api/v1/users/current");
     $user = $r['user'];
 
-    print("User: "${user['name']}", Profile URL: ${user['url']}\n");
+    print("User: \"${user['name']}\", Profile URL: ${user['url']}\n");
 
     # Login as account owner
-    $owner_access_token = $client.login_as_owner();
+    $owner_access_token = $client->login_as_owner();
 
     # Example request #2: Create a new private forum limited to only example.com email domain.
-    $r = $owner_access_token.post("/api/v1/forums", array(
+    $r = $owner_access_token->post("/api/v1/forums", array(
         'forum' => array(
-            'name' => 'Example.com Private Feedback',
+            'name' => 'PHP Client Private Feedback',
             'private' => true,
             'allow_by_email_domain' => true,
             'allowed_email_domains' => array(
                 array('domain' => 'example.com')
             )
         )
-    ))
+    ));
     $forum = $r['forum'];
 
-    print("Forum "${forum['name']}" created! URL: ${forum['url']}\n");
+    print("Forum \"${forum['name']}\" created! URL: ${forum['url']}\n");
 } catch (UserVoice\Unauthorized $e) {
     # Thrown usually due to faulty tokens, untrusted client or if attempting
     # operations without Admin Privileges
@@ -120,6 +121,8 @@ from Admin Console. Go to Settings -> Channels -> API.
     # Thrown when attempting an operation to a resource that does not exist
     var_dump($e);
 }
+
+?>
 ```
 
 Verifying a UserVoice user
