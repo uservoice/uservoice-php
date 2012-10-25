@@ -32,6 +32,9 @@ class Client
         if (!isset($opts['oauth_token_secret'])) {
             $opts['oauth_token_secret'] = '';
         }
+        if (isset($opts['callback'])) {
+            $this->callback = $opts['callback'];
+        }
         $this->opts = $opts;
         $this->api_url = "${opts['protocol']}://$subdomain.${opts['uservoice_domain']}";
         $this->api_key = $api_key;
