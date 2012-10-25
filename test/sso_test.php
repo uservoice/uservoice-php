@@ -10,7 +10,8 @@ class SsoTest extends UnitTestCase {
             'email' => 'regular@example.com'
         ));
 
-        echo $config['protocol'] . '://' . $config['subdomain_name'] . '.' . $config['uservoice_domain'] . '?sso='.$token;
+        // Try it out here:
+        // echo $config['protocol'] . '://' . $config['subdomain_name'] . '.' . $config['uservoice_domain'] . '?sso='.$token;
         $this->assertTrue(strlen($token) > 0);
     }
 }
