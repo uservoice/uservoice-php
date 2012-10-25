@@ -10,7 +10,7 @@ Installation
 Install PECL/OAuth for PHP5 by following the instructions here: http://www.php.net/manual/en/oauth.setup.php
 For installing, you need PEAR: http://pear.php.net/manual/en/installation.getting.php
 
-And add location of PEAR into your php.ini. Find the lines which begin with 'include_path = ' and add the following line:
+And add location of PEAR into your php.ini. Find the lines which begin with 'include\_path = ' and add the following line:
 ```php
 include_path = ".:/usr/lib/php/pear"
 ```
@@ -28,7 +28,9 @@ Examples
 ========
 
 Prerequisites:
+
 * The mcrypt and oauth need to be installed. Check installation instructions for oauth above.
+
 # Suppose your UserVoice site is at http://uservoice-subdomain.uservoice.com/
 ```php
 const USERVOICE_SUBDOMAIN = 'uservoice-subdomain';
