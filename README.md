@@ -113,11 +113,11 @@ try {
     $forum = $r['forum'];
 
     print("Forum \"${forum['name']}\" created! URL: ${forum['url']}\n");
-} catch (UserVoice\Unauthorized $e) {
+} catch (\UserVoice\Unauthorized $e) {
     # Thrown usually due to faulty tokens, untrusted client or if attempting
     # operations without Admin Privileges
     var_dump($e);
-} catch (UserVoice\NotFound $e) {
+} catch (\UserVoice\NotFound $e) {
     # Thrown when attempting an operation to a resource that does not exist
     var_dump($e);
 }
@@ -139,7 +139,7 @@ your site permission to access his or her data in UserVoice.
 require_once('uservoice.php');
 $callback_url = 'http://localhost:3000/'; # your site
 
-$client = new UserVoice\Client($USERVOICE_SUBDOMAIN, $API_KEY, $API_SECRET, array('callback' => $callback_url));
+$client = new \UserVoice\Client($USERVOICE_SUBDOMAIN, $API_KEY, $API_SECRET, array('callback' => $callback_url));
 
 # At this point you want to print/redirect to client.authorize_url in your application.
 # Here we just output them as this is a command-line example.
