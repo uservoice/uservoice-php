@@ -31,6 +31,7 @@ Prerequisites:
 
 * The mcrypt and oauth need to be installed. Check installation instructions for oauth above.
 * Place the following configuration parameters somewhere in your application:
+
 ```php
 # Suppose your UserVoice site is at http://uservoice-subdomain.uservoice.com/
 const USERVOICE_SUBDOMAIN = 'uservoice-subdomain';
