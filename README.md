@@ -43,13 +43,13 @@ SSO-token generation using uservoice library
 --------------------------------------------
 
 SSO-token can be used to create sessions for SSO users. They are capable of synchronizing the user information from one system to another.
-Generating the SSO token from SSO key and given uservoice subdomain can be done by calling UserVoice.generate\_sso\_token method like this:
+Generating the SSO token from SSO key and given uservoice subdomain can be done by calling UserVoice\\generate\_sso\_token method like this:
 
 ```php
 <?php
     require_once('uservoice.php');
 
-    $sso_token = UserVoice::generate_sso_token(USERVOICE_SUBDOMAIN, SSO_KEY, array(
+    $sso_token = UserVoice\generate_sso_token(USERVOICE_SUBDOMAIN, SSO_KEY, array(
         'display_name' => "John Doe",
         'email' => 'john.doe@example.com'
     ), 5*60); # the token will be valid for 5 minutes (5*60 seconds) by default

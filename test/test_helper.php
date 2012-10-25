@@ -14,6 +14,12 @@ function readConfiguration($file) {
         print "fill in the subdomain_name, api_key and api_secret.\n";
         exit(1);
     }
+    if (!isset($config['uservoice_domain'])) {
+        $config['uservoice_domain'] = 'uservoice.com';
+    }
+    if (!isset($config['protocol'])) {
+        $config['protocol'] = 'https';
+    }
     return $config;
 }
 ?>

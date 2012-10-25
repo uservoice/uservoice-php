@@ -5,10 +5,7 @@ class ClientTest extends UnitTestCase {
 
     function setUp() {
         $config = readConfiguration('test/config.yml');
-        $this->client = new \UserVoice\Client(
-                            $config['subdomain_name'],
-                            $config['api_key'],
-                            $config['api_secret'], $config);
+        $this->client = new UserVoice\Client($config['subdomain_name'], $config['api_key'], $config['api_secret'], $config);
     }
 
     function testShouldGet10FirstUsers() {
