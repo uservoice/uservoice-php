@@ -9,14 +9,13 @@ This library allows you to easily:
 Installation
 ============
 
-Install PECL/OAuth for PHP5 by following the instructions here: http://www.php.net/manual/en/oauth.setup.php
-For installing, you need PEAR: http://pear.php.net/manual/en/installation.getting.php
+For installing OAuth, you need [PECL/PEAR](http://pear.php.net/manual/en/installation.getting.php). After downloading 
+PEAR you need to specify its location in your php.ini.
 
-And add location of PEAR into your php.ini. Find the lines which begin with 'include\_path = ' and add the following line:
 ```php
 include_path = ".:/usr/lib/php/pear"
 ```
-Now you should have the command 'pecl' available, so run:
+Now you should have the command 'pecl' available, so run ([detailed instructions](http://www.php.net/manual/en/oauth.setup.php)):
 ```sh
 sudo pecl install oauth
 ```
@@ -24,7 +23,8 @@ The installation script will finally suggest you to add the following line to ph
 ```php
 extension=oauth.so
 ```
-You also need mcrypt:
+You also need mcrypt ([detailed instructions](http://www.php.net/manual/en/mcrypt.setup.php)):
+
 
 ```php
 extension=mcrypt.so
@@ -35,16 +35,15 @@ Then install Composer from http://getcomposer.org/download/ and place it in your
 composer.phar install uservoice
 ```
 
-
-
 Now you should be good to go!
+
 
 Examples
 ========
 
 Prerequisites:
 
-* The mcrypt and oauth need to be installed. Check installation instructions for oauth above.
+* The mcrypt and oauth need to be installed. Check installation instructions above.
 * Place the following configuration parameters somewhere in your application:
 
 ```php
@@ -67,7 +66,7 @@ Generating the SSO token from SSO key and given uservoice subdomain can be done 
 <?php
     require_once('uservoice.php');
 
-    $sso_token = UserVoice\generate_sso_token($USERVOICE_SUBDOMAIN, $SSO_KEY, array(
+    $sso_token = \UserVoice\generate_sso_token($USERVOICE_SUBDOMAIN, $SSO_KEY, array(
         'display_name' => "John Doe",
         'email' => 'john.doe@example.com'
     ), 5*60); # the token will be valid for 5 minutes (5*60 seconds) by default
@@ -126,11 +125,11 @@ try {
     $forum = $r['forum'];
 
     print("Forum \"${forum['name']}\" created! URL: ${forum['url']}\n");
-} catch (UserVoice\Unauthorized $e) {
+} catch (\UserVoice\Unauthorized $e) {
     # Thrown usually due to faulty tokens, untrusted client or if attempting
     # operations without Admin Privileges
     var_dump($e);
-} catch (UserVoice\NotFound $e) {
+} catch (\UserVoice\NotFound $e) {
     # Thrown when attempting an operation to a resource that does not exist
     var_dump($e);
 }
@@ -152,7 +151,7 @@ your site permission to access his or her data in UserVoice.
 require_once('uservoice.php');
 $callback_url = 'http://localhost:3000/'; # your site
 
-$client = new UserVoice\Client($USERVOICE_SUBDOMAIN, $API_KEY, $API_SECRET, array('callback' => $callback_url));
+$client = new \UserVoice\Client($USERVOICE_SUBDOMAIN, $API_KEY, $API_SECRET, array('callback' => $callback_url));
 
 # At this point you want to print/redirect to client.authorize_url in your application.
 # Here we just output them as this is a command-line example.
