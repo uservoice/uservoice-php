@@ -24,6 +24,19 @@ The installation script will finally suggest you to add the following line to ph
 ```php
 extension=oauth.so
 ```
+You also need mcrypt:
+
+```php
+extension=mcrypt.so
+```
+Then install Composer from http://getcomposer.org/download/ and place it in your PATH.
+
+```php
+composer.phar install uservoice
+```
+
+
+
 Now you should be good to go!
 
 Examples

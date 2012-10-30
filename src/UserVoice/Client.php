@@ -1,8 +1,6 @@
 <?php
 namespace UserVoice;
 
-require_once(dirname(__FILE__) . '/collection.php');
-
 class APIError extends \Exception { }
 class ApplicationError extends APIError { }
 class NotFound extends APIError { }

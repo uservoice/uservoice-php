@@ -1,5 +1,6 @@
 <?php
 require_once(dirname(__FILE__) . '/test_helper.php');
+require_once(dirname(__FILE__) . '/../src/UserVoice/SSO.php');
 
 class SsoTest extends UnitTestCase {
 

@@ -1,0 +1,104 @@
+{
+    "hash": "56d044058668b2f40e141a54abab8243",
+    "packages": [
+
+    ],
+    "packages-dev": [
+        {
+            "name": "lespoilus/spyc",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/lespoilus/spyc.git",
+                "reference": "5a5bacdef1e514bdbb30701f13d9867140a6a21b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/lespoilus/spyc/zipball/5a5bacdef1e514bdbb30701f13d9867140a6a21b",
+                "reference": "5a5bacdef1e514bdbb30701f13d9867140a6a21b",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.1"
+            },
+            "time": "1350301967",
+            "type": "library",
+            "installation-source": "source",
+            "autoload": {
+                "files": [
+                    "spyc.php"
+                ]
+            },
+            "license": [
+                "MIT License"
+            ],
+            "authors": [
+                {
+                    "name": "mustangostang",
+                    "email": "vlad.andersen@gmail.com"
+                }
+            ],
+            "description": "A simple YAML loader/dumper class for PHP",
+            "homepage": "https://github.com/lespoius/spyc/",
+            "keywords": [
+                "yaml",
+                "zf2",
+                "yml",
+                "spyc"
+            ]
+        },
+        {
+            "name": "vierbergenlars/simpletest",
+            "version": "v1.1.2",
+            "source": {
+                "type": "git",
+                "url": "git://github.com/vierbergenlars/simpletest.git",
+                "reference": "v1.1.2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/vierbergenlars/simpletest/zipball/v1.1.2",
+                "reference": "v1.1.2",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5"
+            },
+            "time": "2012-05-18 03:44:55",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "classmap": [
+                    ""
+                ]
+            },
+            "license": [
+                "LGPL"
+            ],
+            "authors": [
+                {
+                    "name": "Marcus Baker",
+                    "homepage": "http://sourceforge.net/users/lastcraft"
+                },
+                {
+                    "name": "Perrick Penet",
+                    "homepage": "http://sourceforge.net/users/pp11"
+                }
+            ],
+            "description": "Unit testing for PHP",
+            "keywords": [
+                "testing",
+                "test",
+                "unittest",
+                "SimpleTest"
+            ]
+        }
+    ],
+    "aliases": [
+
+    ],
+    "minimum-stability": "stable",
+    "stability-flags": {
+        "lespoilus/spyc": 20
+    }
+}

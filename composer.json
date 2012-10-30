@@ -1,0 +1,22 @@
+{
+    "name": "uservoice/uservoice",
+    "type": "library",
+    "description": "UserVoice PHP Library for API Connections",
+    "keywords": ["sso", "oauth", "uservoice", "api", "client"],
+    "homepage": "https://github.com/uservoice/uservoice-php",
+    "license": "MIT",
+    "require": {
+        "php": ">=5.3",
+        "ext-mcrypt": "*",
+        "ext-oauth": "*"
+    },
+    "require-dev": {
+        "vierbergenlars/simpletest": "v1.1.2",
+        "lespoilus/spyc": "dev-master"
+    },
+    "autoload": {
+        "psr-0": {
+            "UserVoice": "src"
+        }
+    }
+}
