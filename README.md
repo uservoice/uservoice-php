@@ -73,7 +73,7 @@ Generating the SSO token from SSO key and given uservoice subdomain can be done 
 
 ```php
 <?php
-    $sso_token = \UserVoice\SSO::generate_sso_token($USERVOICE_SUBDOMAIN, $SSO_KEY, array(
+    $sso_token = \UserVoice\SSO::generate_token($USERVOICE_SUBDOMAIN, $SSO_KEY, array(
         'display_name' => "John Doe",
         'email' => 'john.doe@example.com'
     ), 5*60); // the token will be valid for 5 minutes (5*60 seconds) by default
