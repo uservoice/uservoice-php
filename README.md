@@ -29,10 +29,16 @@ You also need mcrypt ([detailed instructions](http://www.php.net/manual/en/mcryp
 ```php
 extension=mcrypt.so
 ```
-Finally, install [Composer](http://getcomposer.org/download/) and place composer.phar in your PATH. To install uservoice under vendor/, run this:
+Finally, install [Composer](http://getcomposer.org/download/) and place composer.phar in your PATH. Add uservoice/uservoice in your composer.json:
 
-```php
-composer.phar install uservoice
+```javascript
+"uservoice/uservoice": "v0.0.4"
+```
+
+Then install project dependencies using Composer.
+
+```sh
+composer.phar install
 ```
 
 Now you should be good to go!
@@ -63,13 +69,16 @@ SSO-token can be used to create sessions for SSO users. They are capable of sync
 Generating the SSO token from SSO key and given uservoice subdomain can be done by calling UserVoice\\SSO::generate\_sso\_token method like this:
 
 ```php
-<?php
-    require_once('uservoice.php');
+// Use autoload.php of Composer to use the library and its dependencies:
+require_once('vendor/autoload.php');
+```
 
+```php
+<?php
     $sso_token = \UserVoice\SSO::generate_sso_token($USERVOICE_SUBDOMAIN, $SSO_KEY, array(
         'display_name' => "John Doe",
         'email' => 'john.doe@example.com'
-    ), 5*60); # the token will be valid for 5 minutes (5*60 seconds) by default
+    ), 5*60); // the token will be valid for 5 minutes (5*60 seconds) by default
 
     echo 'https://' . $USERVOICE_SUBDOMAIN . '.uservoice.com/?sso='.$sso_token."\n";
 ?>
@@ -85,11 +94,9 @@ from Admin Console. Go to Settings -> Channels -> API.
 <?
 
 try {
-    require_once('uservoice.php');
-
     $client = new \UserVoice\Client($USERVOICE_SUBDOMAIN, $API_KEY, $API_SECRET);
 
-    # Get users of a subdomain (requires trusted client, but no user)
+    // Get users of a subdomain (requires trusted client, but no user)
     $users = $client->get_collection("/api/v1/users");
 
     print "Subdomain \"" . $USERVOICE_SUBDOMAIN . "\" has " . count($users) . " users.\n";
@@ -99,19 +106,19 @@ try {
     }
 
 
-    # Now, let's login as mailaddress@example.com, a regular user
+    // Now, let's login as mailaddress@example.com, a regular user
     $regular_access_token = $client->login_as('mailaddress@example.com');
 
-    # Example request #1: Get current user.
+    // Example request #1: Get current user.
     $r = $regular_access_token->get("/api/v1/users/current");
     $user = $r['user'];
 
     print("User: \"${user['name']}\", Profile URL: ${user['url']}\n");
 
-    # Login as account owner
+    // Login as account owner
     $owner_access_token = $client->login_as_owner();
 
-    # Example request #2: Create a new private forum limited to only example.com email domain.
+    // Example request #2: Create a new private forum limited to only example.com email domain.
     $r = $owner_access_token->post("/api/v1/forums", array(
         'forum' => array(
             'name' => 'PHP Client Private Feedback',
@@ -126,11 +133,12 @@ try {
 
     print("Forum \"${forum['name']}\" created! URL: ${forum['url']}\n");
 } catch (\UserVoice\Unauthorized $e) {
-    # Thrown usually due to faulty tokens, untrusted client or if attempting
-    # operations without Admin Privileges
+    /* Thrown usually due to faulty tokens, untrusted client or if attempting
+     * operations without Admin Privileges
+     */
     var_dump($e);
 } catch (\UserVoice\NotFound $e) {
-    # Thrown when attempting an operation to a resource that does not exist
+    // Thrown when attempting an operation to a resource that does not exist
     var_dump($e);
 }
 
@@ -148,7 +156,6 @@ your site permission to access his or her data in UserVoice.
 ```php
 <?php
 
-require_once('uservoice.php');
 $callback_url = 'http://localhost:3000/'; # your site
 
 $client = new \UserVoice\Client($USERVOICE_SUBDOMAIN, $API_KEY, $API_SECRET, array('callback' => $callback_url));

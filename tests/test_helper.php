@@ -1,6 +1,6 @@
 <?php
 function readConfiguration($file) {
-    $config = Spyc::YAMLLoad('test/config.yml');
+    $config = Spyc::YAMLLoad('tests/config.yml');
     if (!(is_array($config) && 
             isset($config['subdomain_name']) && strlen($config['subdomain_name']) &&
             isset($config['api_key']) && strlen($config['api_key']) &&
