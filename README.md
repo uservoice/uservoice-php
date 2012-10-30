@@ -29,7 +29,7 @@ You also need mcrypt ([detailed instructions](http://www.php.net/manual/en/mcryp
 ```php
 extension=mcrypt.so
 ```
-Finally, install Composer from http://getcomposer.org/download/ and place it in your PATH. To install uservoice under vendor/, run this:
+Finally, install [Composer](http://getcomposer.org/download/) and place composer.phar in your PATH. To install uservoice under vendor/, run this:
 
 ```php
 composer.phar install uservoice
