@@ -1,4 +1,12 @@
 <?php
+/**
+ * PHP version 5
+ *
+ * A lazy-loading collection.
+ *
+ * Loads only the necessary pages out of all the matching records in UserVoice API.
+ *
+ */
 namespace UserVoice;
 const PER_PAGE = 100;
 
