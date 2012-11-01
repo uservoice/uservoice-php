@@ -60,6 +60,9 @@ $SSO_KEY = '982c88f2df72572859e8e23423eg87ed'; # Admin Console -> Settings -> Ge
 # Define an API client at: Admin Console -> Settings -> Channels -> API
 $API_KEY = 'oQt2BaunWNuainc8BvZpAm';
 $API_SECRET = '3yQMSoXBpAwuK3nYHR0wpY6opE341inL9a2HynGF2';
+
+// Use autoload.php of Composer to use the library and its dependencies:
+require_once('vendor/autoload.php');
 ```
 
 SSO-token generation using uservoice library
@@ -69,13 +72,8 @@ SSO-token can be used to create sessions for SSO users. They are capable of sync
 Generating the SSO token from SSO key and given uservoice subdomain can be done by calling UserVoice\\SSO::generate\_sso\_token method like this:
 
 ```php
-// Use autoload.php of Composer to use the library and its dependencies:
-require_once('vendor/autoload.php');
-```
-
-```php
 <?php
-    $sso_token = \UserVoice\SSO::generate_sso_token($USERVOICE_SUBDOMAIN, $SSO_KEY, array(
+    $sso_token = \UserVoice\SSO::generate_token($USERVOICE_SUBDOMAIN, $SSO_KEY, array(
         'display_name' => "John Doe",
         'email' => 'john.doe@example.com'
     ), 5*60); // the token will be valid for 5 minutes (5*60 seconds) by default
