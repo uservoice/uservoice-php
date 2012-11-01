@@ -46,18 +46,18 @@ class ClientTest extends UnitTestCase {
 
     function testShouldBeAbleToGetAccessTokenAsOwner() {
         $owner = $this->client->login_as_owner();
-        $r = $owner->get("/api/v1/users/current");
-        $this->assertEqual($r['user']['roles']['owner'], true);
+        $user = $owner->get_object("/api/v1/users/current");
+        $this->assertEqual($user['roles']['owner'], true);
 
         $regular = $owner->login_as('regular@example.com');
 
         // The owner access token still works
-        $r = $owner->get("/api/v1/users/current");
-        $this->assertEqual($r['user']['roles']['owner'], true);
+        $user = $owner->get_object("/api/v1/users/current");
+        $this->assertEqual($user['roles']['owner'], true);
 
         // User should NOT be owner
-        $r = $regular->get("/api/v1/users/current");
-        $this->assertEqual($r['user']['roles']['owner'], false);
+        $user = $regular->get_object("/api/v1/users/current");
+        $this->assertEqual($user['roles']['owner'], false);
     }
 
     function testShouldNotBeAbleToCreateKBArticleAsNobody () {

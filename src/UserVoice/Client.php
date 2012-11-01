@@ -86,6 +86,13 @@ class Client
     function get_collection($path, $opts=array()) {
         return new Collection($this, $path, $opts);
     }
+    function get_object($path, $opts=array()) {
+        $result = $this->get($path);
+        if (count($result) !== 1) {
+            throw new NotFound('The resource "' . $path . "' is not a single object.");
+        }
+        return array_pop($result);
+    }
     public function get_request_token() {
         try {
             $url = $this->api_url . '/oauth/request_token';
