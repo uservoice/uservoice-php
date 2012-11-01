@@ -86,9 +86,15 @@ class Client
     function get_collection($path, $opts=array()) {
         return new Collection($this, $path, $opts);
     }
-    function get_object($path, $opts=array()) {
+    function get_object($path, $key=null) {
         $result = $this->get($path);
-        if (count($result) !== 1) {
+        if ($key !== null) {
+            if (isset($result[$key])) {
+                return $result[$key];
+            } else {
+                throw new NotFound('The resource "' . $path . "' does not have '$key'.");
+            }
+        } elseif (count($result) !== 1) {
             throw new NotFound('The resource "' . $path . "' is not a single object.");
         }
         return array_pop($result);
