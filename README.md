@@ -32,7 +32,7 @@ extension=mcrypt.so
 Finally, install [Composer](http://getcomposer.org/download/) and place composer.phar in your PATH. Add uservoice/uservoice in your composer.json:
 
 ```javascript
-"uservoice/uservoice": "v0.0.4"
+"uservoice/uservoice": ">=0.0.5"
 ```
 
 Then install project dependencies using Composer.
