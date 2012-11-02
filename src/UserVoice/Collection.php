@@ -49,7 +49,10 @@ class Collection implements \Iterator, \ArrayAccess, \Countable {
         $value = NULL;
         if ($offset >= 0 && $offset < $this->limit) {
             $page = $this->loadPage(floor($offset / PER_PAGE) + 1);
-            $value = $page[$offset % PER_PAGE];
+            $offsetInPage = $offset % PER_PAGE;
+            if (isset($page[$offsetInPage])) {
+                $value = $page[$offsetInPage];
+            }
         }
         return $value;
     }
