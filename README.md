@@ -9,24 +9,19 @@ This library allows you to easily:
 Installation
 ============
 
-For installing OAuth, you need [PECL/PEAR](http://pear.php.net/manual/en/installation.getting.php). After downloading 
-PEAR you need to specify its location in your php.ini.
+For installing OAuth, you should check if your operating system packaging system has PHP OAuth and MCrypt packages available. For example, for PHP 5.4 Homebrew comes with packages php54-oauth and php54-mcrypt. If your packaging systems is unable to install OAuth for PHP, you just need to install
+[PECL/PEAR](http://pear.php.net/manual/en/installation.getting.php).
 
-```php
-include_path = ".:/usr/lib/php/pear"
-```
-Now you should have the command 'pecl' available, so run ([detailed instructions](http://www.php.net/manual/en/oauth.setup.php)):
+
+After getting PEAR you should have the command 'pecl' available, so run ([detailed instructions](http://www.php.net/manual/en/oauth.setup.php). Homebrew equivalent: ```brew install php54-oauth```):
 ```sh
 sudo pecl install oauth
 ```
-The installation script will finally suggest you to add the following line to php.ini:
+You also need mcrypt ([detailed instructions](http://www.php.net/manual/en/mcrypt.setup.php). Homebrew equivalent: ```brew install php54-mcrypt```):
+
+When you get mcrypt and oauth installed, specify them in your php.ini file:
 ```php
 extension=oauth.so
-```
-You also need mcrypt ([detailed instructions](http://www.php.net/manual/en/mcrypt.setup.php)):
-
-
-```php
 extension=mcrypt.so
 ```
 Finally, install [Composer](http://getcomposer.org/download/) and place composer.phar in your PATH. Add uservoice/uservoice in your composer.json:
@@ -35,7 +30,7 @@ Finally, install [Composer](http://getcomposer.org/download/) and place composer
 "uservoice/uservoice": ">=0.0.5"
 ```
 
-Then install project dependencies using Composer.
+Then install project dependencies using Composer:
 
 ```sh
 composer.phar install
@@ -85,7 +80,7 @@ Generating the SSO token from SSO key and given uservoice subdomain can be done 
 Making API calls
 ----------------
 
-You need to create an instance of UserVoice\\Client. Get $API_KEY and $API_SECRET for an API client which you can create 
+You need to create an instance of UserVoice\\Client. Get $API_KEY and $API_SECRET for an API client which you can create
 from Admin Console. Go to Settings -> Channels -> API.
 
 ```php
