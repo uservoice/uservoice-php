@@ -17,6 +17,10 @@ class Client
     private $opts;
 
     function __construct($subdomain, $api_key, $api_secret, $opts=array()) {
+        if (is_array($api_secret)) {
+            $opts = $api_secret;
+            $api_secret = null;
+        }
         $this->subdomain = $subdomain;
         if (!isset($opts['uservoice_domain'])) {
             $opts['uservoice_domain'] = 'uservoice.com';

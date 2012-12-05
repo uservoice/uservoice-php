@@ -14,6 +14,13 @@ class ClientTest extends UnitTestCase {
         $this->assertEqual(count($result['users']), 10);
     }
 
+    function testShouldGetNonPrivateForumAsUnsignedClient() {
+        $config = readConfiguration('test/config.yml');
+        $client = new UserVoice\Client($config['subdomain_name'], $config['api_key'], $config);
+        $forums = $client->get_collection("/api/v1/forums", array('limit' => 1));
+        $this->assertFalse($forums[0]['private']);
+    }
+
     function testShouldGetCollectionOfUsers() {
         $users = $this->client->get_collection("/api/v1/users", array('limit' => 11));
         $this->assertEqual(count($users), 11);
