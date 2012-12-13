@@ -45,7 +45,7 @@ class Client
         $this->secret = $opts['oauth_token_secret'];
         $this->access_token = new \OAuth($api_key, $api_secret, OAUTH_SIG_METHOD_HMACSHA1, OAUTH_AUTH_TYPE_AUTHORIZATION); 
         $this->access_token->setToken($this->token, $this->secret);
-        $this->default_headers = array('Content-Type' => 'application/json', 'Accept' => 'application/json');
+        $this->default_headers = array('Content-Type' => 'application/json', 'Accept' => 'application/json', 'API-Client' => '0.0.8');
     }
 
     function authorize_url() {
