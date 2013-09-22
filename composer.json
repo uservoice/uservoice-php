@@ -11,7 +11,7 @@
         "ext-oauth": "*"
     },
     "require-dev": {
-        "vierbergenlars/simpletest": "v1.1.2",
+        "simpletest/simpletest": "~1.1.2",
         "lespoilus/spyc": "dev-master"
     },
     "autoload": {
