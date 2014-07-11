@@ -127,7 +127,7 @@ class Client
     public function login_with_verifier($verifier) {
         try {
             $token = null;
-            $request_token_client = $this->request_token->access_token;
+            $request_token_client = $this->access_token;
             if ($request_token_client->fetch($this->api_url . '/oauth/access_token', array('oauth_verifier' => $verifier), 'POST')) {
                 $result = $request_token_client->getLastResponse(); 
                 parse_str($result, $token);
