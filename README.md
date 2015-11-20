@@ -19,11 +19,13 @@ sudo pecl install oauth
 ```
 You also need mcrypt ([detailed instructions](http://www.php.net/manual/en/mcrypt.setup.php). Homebrew equivalent: ```brew install php54-mcrypt```):
 
-When you get mcrypt and oauth installed, specify them in your php.ini file:
+When you get mcrypt and oauth installed, specify them in your php.ini* file:
 ```php
 extension=oauth.so
 extension=mcrypt.so
 ```
+*\*Note: on some systems, the php.ini file used for the command line interface is separate from the one used in your web server. Make sure that Composer has access to the extensions by configuring the PHP command prompt settings.*
+
 Finally, install [Composer](http://getcomposer.org/download/) and place composer.phar in your PATH. Add uservoice/uservoice in your composer.json:
 
 ```javascript
