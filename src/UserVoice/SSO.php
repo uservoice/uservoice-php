@@ -35,15 +35,9 @@ class SSO {
 
         $data = json_encode($user_hash);
 
-        // Not sure why this is necessary, but leaving it in here.
         for ($i = 0; $i < 16; $i++) {
             $data[$i] = $data[$i] ^ $iv[$i];
         }
-
-        // Pad the data to fit into exact the 16 byte blocks that AES requires.
-        // But OpenSSL takes care of that for us.
-        // $pad = 16 - (strlen($data) % 16);
-        // $data = $data . str_repeat(chr($pad), $pad);
 
         $encrypted = openssl_encrypt($data, 'AES-128-CBC', $key, 0, $iv);
 
