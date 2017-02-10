@@ -7,7 +7,6 @@
     "license": "MIT",
     "require": {
         "php": ">=5.3",
-        "ext-mcrypt": "*",
         "ext-oauth": "*"
     },
     "require-dev": {
