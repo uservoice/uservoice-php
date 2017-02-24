@@ -9,7 +9,7 @@ This library allows you to easily:
 Installation
 ============
 
-For installing OAuth, you should check if your operating system packaging system has PHP OAuth and MCrypt packages available. For example, for PHP 5.4 Homebrew comes with packages php54-oauth and php54-mcrypt. If your packaging systems is unable to install OAuth for PHP, you just need to install
+For installing OAuth, you should check if your operating system packaging system has PHP OAuth package available and that your php version has been compiled with openssl ([instructions](http://php.net/manual/en/openssl.installation.php)). For example, for PHP 5.4 Homebrew comes with packages php54-oauth. If your packaging systems is unable to install OAuth for PHP, you just need to install
 [PECL/PEAR](http://pear.php.net/manual/en/installation.getting.php).
 
 
@@ -17,13 +17,13 @@ After getting PEAR you should have the command 'pecl' available, so run ([detail
 ```sh
 sudo pecl install oauth
 ```
-You also need mcrypt ([detailed instructions](http://www.php.net/manual/en/mcrypt.setup.php). Homebrew equivalent: ```brew install php54-mcrypt```):
-
-When you get mcrypt and oauth installed, specify them in your php.ini file:
+When you get oauth installed, specify them in your php.ini file:
 ```php
 extension=oauth.so
-extension=mcrypt.so
 ```
+
+You also need openssl ([detailed instructions](http://php.net/manual/en/openssl.installation.php))
+
 Finally, install [Composer](http://getcomposer.org/download/) and place composer.phar in your PATH. Add uservoice/uservoice in your composer.json:
 
 ```javascript
@@ -44,7 +44,7 @@ Examples
 
 Prerequisites:
 
-* The mcrypt and oauth need to be installed. Check installation instructions above.
+* php must have been compiled with openssl and oauth need to be installed. Check installation instructions above.
 * Place the following configuration parameters somewhere in your application:
 
 ```php
